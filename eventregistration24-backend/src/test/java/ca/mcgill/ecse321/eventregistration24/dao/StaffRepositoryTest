@@ -1,0 +1,41 @@
+package ca.mcgill.ecse321.eventregistration24.dao;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import ca.mcgill.ecse321.EventRegistration.models.Staff;
+
+@SpringBootTest
+public class StaffRepositoryTests {
+	@Autowired
+	private StaffRepository staffRepository;
+
+	@AfterEach
+	public void clearDatabase() {
+		staffRepository.deleteAll();
+	}
+
+	@Test
+	public void testPersistAndLoadStaff() {
+		// Create Staff.
+		String name = "Muffin Woman";
+		Staff staff = new Staff();
+		staff.setName(name);
+		// Save Staff
+		staffRepository.save(staff);
+
+		// Read Staff from database.
+		staff = staffRepository.findStaffByName(name);
+
+		// Assert that Staff is not null and has correct attributes.
+		assertNotNull(Staff);
+		assertEquals(name, staff.getName());
+		assertEquals(address, staff.getAddress());
+        assertEquals(birthday, staff.birthday());
+	}
+}

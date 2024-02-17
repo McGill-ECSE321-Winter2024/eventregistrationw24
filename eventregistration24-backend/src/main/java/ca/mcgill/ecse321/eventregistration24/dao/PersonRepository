@@ -1,0 +1,17 @@
+package ca.mcgill.ecse321.eventregistration24.dao;
+
+import org.springframework.data.repository.CrudRepository;
+import java.sql.Date;
+import ca.mcgill.ecse321.eventregistration.model.Person;
+
+public interface PersonRepository extends CrudRepository<Person, Integer>{
+
+	Person findPersonByName(String name);
+
+    Person findPersonById(Integer id);
+
+    List<Registration> findByAddress(String address);
+
+    List<Registration> findByBirthday(Date birthday);
+
+}

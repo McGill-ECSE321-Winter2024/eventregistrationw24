@@ -1,0 +1,53 @@
+package ca.mcgill.ecse321.EventRegistration.dao;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.sql.Date;
+import java.sql.Time;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import ca.mcgill.ecse321.EventRegistration.models.Event;
+
+@SpringBootTest
+public class EventRepositoryTests {
+	@Autowired
+	private EventRepository eventRepository;
+
+	@AfterEach
+	public void clearDatabase() {
+		eventRepository.deleteAll();
+	}
+
+	@Test
+	public void testPersistAndLoadEvent() {
+		// Create event.
+        String name = "Shrek 2";
+		Date date = Date.valueOf("2023-12-01");
+		Time start = Time.valueOf("08:00:00");
+		Time end = Time.valueOf("12:00:00");
+
+		Event event = new Event();
+		event.setName(name);
+		event.setDate(date);
+		event.setStartTime(start);
+		event.setEndTime(end);
+
+		// Save event.
+		eventRepository.save(event);
+
+		// Read event from database.
+		event = eventRepository.findEventByName(name);
+
+		// Assert event is not null and has correct attributes.
+		assertNotNull(event);
+		assertEquals(name, event.getName());
+		assertEquals(date, event.getDate());
+		assertEquals(start, event.getStartTime());
+		assertEquals(end, event.getEndTime());
+	}
+}

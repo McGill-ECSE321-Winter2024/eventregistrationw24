@@ -1,0 +1,46 @@
+package ca.mcgill.ecse321.eventregistration24.dao;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import ca.mcgill.ecse321.EventRegistration.models.Person;
+
+@SpringBootTest
+public class PersonRepositoryTests {
+	@Autowired
+	private PersonRepository personRepository;
+
+	@AfterEach
+	public void clearDatabase() {
+		personRepository.deleteAll();
+	}
+
+	@Test
+	public void testPersistAndLoadPerson() {
+		// Create person.
+		String name = "Muffin Man";
+		Date birthday = Date.valueOf("1990-01-01");
+		String address = "123 Drury Lane";
+		Person person = new Person();
+		person.setName(name);
+		person.serBirthday(birthday);
+		person.setAddress(address);
+
+		// Save person
+		personRepository.save(person);
+
+		// Read person from database.
+		person = personRepository.findPersonByName(name);
+
+		// Assert that person is not null and has correct attributes.
+		assertNotNull(person);
+		assertEquals(name, person.getName());
+		assertEquals(address, person.getAddress());
+        assertEquals(birthday, person.birthday());
+	}
+}
